@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import Window from './Window';
-import { ComputerIcon, FolderIcon, TextIcon, TerminalIcon, LogoIcon } from './XPIcons';
 
 type WindowData = {
     id: string;
@@ -15,24 +14,33 @@ type WindowData = {
     isMacStyle?: boolean;
     isOpen: boolean;
     isMinimized?: boolean;
-    icon?: React.ReactNode;
+    iconUrl?: string;
+};
+
+// Static Icon URLs from IconArchive for Vista Look
+const ICONS = {
+    computer: "https://icons.iconarchive.com/icons/icons-land/vista-hardware-devices/128/Computer-icon.png",
+    folder: "https://icons.iconarchive.com/icons/yellowicon/vista-themes/128/Folder-icon.png",
+    text: "https://icons.iconarchive.com/icons/gakuseisean/ivista-2/128/Files-Text-icon.png",
+    terminal: "https://icons.iconarchive.com/icons/icons8/windows-8/128/Programming-Console-icon.png",
+    windowsLogo: "https://icons.iconarchive.com/icons/nuno-pinheiro/linspire/48/windows-logo-icon.png"
 };
 
 export default function DesktopWorkspace() {
     const [windows, setWindows] = useState<WindowData[]>([
         {
             id: 'terminal',
-            title: 'me@info:~',
-            icon: <TerminalIcon />,
+            title: 'Administrator: me@info:~',
+            iconUrl: ICONS.terminal,
             initialX: 380,
             initialY: 80,
-            width: 450,
-            height: 250,
+            width: 480,
+            height: 280,
             isOpen: false,
             component: (
                 <div className="w-full h-full bg-black text-[#00ff00] p-4 font-mono text-sm overflow-auto">
-                    <div>Microsoft Windows XP [Version 5.1.2600]</div>
-                    <div>(C) Copyright 1985-2001 Microsoft Corp.</div>
+                    <div>Microsoft Windows [Version 6.0.6002]</div>
+                    <div>Copyright (c) 2006 Microsoft Corporation.  All rights reserved.</div>
                     <br />
                     <div>1 #</div>
                     <div>2 #</div>
@@ -41,7 +49,7 @@ export default function DesktopWorkspace() {
                     <div>5 # <span className="text-white text-3xl font-bold tracking-widest pl-4">HUERTA</span></div>
                     <div className="text-center text-xs mt-2 text-white">------ NET SENIOR SOFTWARE DEVELOPER ------</div>
                     <div className="mt-4 flex items-center">
-                        <span>C:\Documents and Settings\Mathew&gt; </span>
+                        <span>C:\\Users\\Mathew&gt; </span>
                         <div className="w-2 h-4 bg-white ml-1 animate-pulse" />
                     </div>
                 </div>
@@ -49,99 +57,109 @@ export default function DesktopWorkspace() {
         },
         {
             id: 'experience',
-            title: '*New Text Document.txt - Notepad',
-            icon: <TextIcon />,
+            title: 'Experience.txt - Notepad',
+            iconUrl: ICONS.text,
             initialX: 150,
             initialY: 300,
             width: 600,
-            height: 300,
+            height: 350,
             isOpen: true,
             component: (
-                <div className="w-full h-full bg-white flex flex-col font-sans text-sm text-black border border-white border-b-gray-400">
-                    <div className="flex px-2 py-1 bg-[#efebe7] border-b border-[#d4d0c8] text-xs">
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer">File</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer">Edit</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer">Format</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer">View</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer">Help</span>
+                <div className="w-full h-full bg-white flex flex-col font-sans text-sm text-black">
+                    <div className="flex px-2 py-1 bg-[#f0f4f9] border-b border-[#e1eaf5] text-xs">
+                        <span className="px-2 hover:bg-[#c2d7f1] cursor-pointer">File</span>
+                        <span className="px-2 hover:bg-[#c2d7f1] cursor-pointer">Edit</span>
+                        <span className="px-2 hover:bg-[#c2d7f1] cursor-pointer">Format</span>
+                        <span className="px-2 hover:bg-[#c2d7f1] cursor-pointer">View</span>
+                        <span className="px-2 hover:bg-[#c2d7f1] cursor-pointer">Help</span>
                     </div>
-                    <div className="flex-1 p-2 font-mono scrollbar-hide overflow-auto whitespace-pre-wrap outline-none border-t border-gray-400" contentEditable suppressContentEditableWarning>
-                        {`yeah dudes promise this is windows 10\n\ncheck the fine print in winver :)\n\n-- WORK EXPERIENCE --\nUniversal Postal Union | Senior Software Developer | Oct 2013 - Present\n- Lead Architecture & Development\n- Mentored agile practices\n`}
+                    <div className="flex-1 p-2 font-mono scrollbar-hide overflow-auto whitespace-pre-wrap outline-none" contentEditable suppressContentEditableWarning>
+                        {`yeah dudes promise this is windows vista\n\ncheck the fine print in winver :)\n\n-- WORK EXPERIENCE --\nUniversal Postal Union | Senior Software Developer | Oct 2013 - Present\n- Lead Architecture & Development\n- Mentored agile practices\n`}
                     </div>
                 </div>
             )
         },
         {
             id: 'skills',
-            title: 'C:\\',
-            icon: <ComputerIcon />,
+            title: 'Skills',
+            iconUrl: ICONS.folder,
             initialX: 250,
             initialY: 150,
             width: 700,
             height: 480,
             isOpen: true,
             component: (
-                <div className="w-full h-full bg-[#efebe7] flex flex-col font-sans text-sm text-black border border-white">
-                    {/* Menu Bar */}
-                    <div className="flex px-2 py-[2px] border-b border-[#d4d0c8]">
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer select-none">File</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer select-none">Edit</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer select-none">View</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer select-none">Favorites</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer select-none">Tools</span>
-                        <span className="px-2 hover:bg-blue-500 hover:text-white cursor-pointer select-none">Help</span>
-                    </div>
-                    {/* Toolbar */}
-                    <div className="flex items-center px-2 py-1 gap-4 border-b border-[#d4d0c8] bg-[#efebe7]">
-                        <div className="flex items-center gap-1 text-gray-500 cursor-pointer hover:border-gray-400 border border-transparent px-1"><span className="text-xl grayscale opacity-60">⬅️</span> Back</div>
-                        <div className="flex items-center gap-1 text-gray-500 cursor-pointer hover:border-gray-400 border border-transparent px-1"><span className="text-xl grayscale opacity-60">➡️</span></div>
-                        <div className="flex items-center gap-1 text-black cursor-pointer hover:border-gray-400 border border-transparent px-1"><span className="text-xl">⬆️</span></div>
-                        <div className="w-[1px] h-6 bg-gray-300"></div>
-                        <div className="flex items-center gap-1 cursor-pointer hover:border-gray-400 border border-transparent px-1"><span className="text-lg">🔍</span> Search</div>
-                        <div className="flex items-center gap-1 cursor-pointer bg-gray-200 border border-gray-400 px-1"><span className="text-lg">🗂️</span> Folders</div>
-                    </div>
-                    {/* Address bar */}
-                    <div className="flex items-center px-2 py-1 bg-[#efebe7] border-b border-[#d4d0c8] gap-2">
-                        <span className="text-gray-500">Address</span>
-                        <div className="flex-1 bg-white border border-[#7f9db9] px-2 py-[2px] flex items-center gap-1 shadow-inner">
-                            <ComputerIcon className="w-4 h-4" /> <span className="text-xs">C:\</span>
+                <div className="w-full h-full bg-[#f0f4f9] flex flex-col font-sans text-sm text-black">
+                    {/* Vista Explorer Header */}
+                    <div className="flex items-center px-2 py-2 gap-2 bg-[#d7e4f5] border-b border-white">
+                        <div className="flex gap-1">
+                            <div className="w-8 h-8 rounded-full bg-[#c9daf1] flex items-center justify-center border border-[#abbbe0] cursor-pointer"><span className="opacity-50">⬅</span></div>
+                            <div className="w-8 h-8 rounded-full bg-[#c9daf1] flex items-center justify-center border border-[#abbbe0] cursor-pointer"><span className="opacity-50">➡</span></div>
+                        </div>
+                        <div className="flex-1 flex px-2 py-1 bg-white border border-[#abbbe0] rounded items-center gap-2 shadow-inner">
+                            <img src={ICONS.folder} className="w-4 h-4" /> <span>Computer ▸ C: ▸ Users ▸ Mathew ▸ Skills</span>
+                        </div>
+                        <div className="flex px-2 py-1 bg-white border border-[#abbbe0] rounded items-center gap-2 w-48 shadow-inner">
+                            <span className="opacity-50">Search Skills</span>
                         </div>
                     </div>
+                    {/* Command bar */}
+                    <div className="flex px-3 py-2 bg-[#f0f4f9] border-b border-[#d8e2f1] text-[#1c4b8b] text-xs gap-4">
+                        <span className="cursor-pointer hover:underline flex items-center gap-1">Organize ▾</span>
+                        <span className="cursor-pointer hover:underline flex items-center gap-1">Views ▾</span>
+                        <span className="cursor-pointer hover:underline flex items-center gap-1">Burn</span>
+                    </div>
+
                     {/* Main Content Pane */}
-                    <div className="flex flex-1 overflow-hidden border-t border-gray-400">
+                    <div className="flex flex-1 overflow-hidden bg-white shadow-inner">
                         {/* Sidebar */}
-                        <div className="w-56 bg-gradient-to-b from-[#7ba1e7] to-[#638ce0] border-r border-[#638ce0] p-3 overflow-y-auto">
-                            <div className="bg-white rounded-t border border-[#ffffff] overflow-hidden mb-3">
-                                <div className="bg-gradient-to-r from-[#f1f4fb] to-[#d3def5] px-3 py-1 font-bold text-[#0c327d] cursor-pointer hover:brightness-110">
-                                    File and Folder Tasks
+                        <div className="w-48 bg-[#f5f8fc] border-r border-[#d8e2f1] p-3 overflow-y-auto text-sm text-[#1e395b]">
+                            <div className="mb-4">
+                                <div className="font-semibold mb-1">Favorite Links</div>
+                                <div className="pl-4 space-y-1">
+                                    <div className="cursor-pointer hover:underline">Documents</div>
+                                    <div className="cursor-pointer hover:underline">Pictures</div>
+                                    <div className="cursor-pointer hover:underline">Music</div>
+                                    <div className="cursor-pointer hover:underline">Recently Changed</div>
+                                    <div className="cursor-pointer hover:underline">Searches</div>
                                 </div>
-                                <div className="p-3 text-[#0c327d] space-y-2">
-                                    <div className="hover:underline cursor-pointer flex items-center gap-2"><FolderIcon className="w-4 h-4" /> Rename this folder</div>
-                                    <div className="hover:underline cursor-pointer flex items-center gap-2"><FolderIcon className="w-4 h-4" /> Move this folder</div>
-                                    <div className="hover:underline cursor-pointer flex items-center gap-2"><FolderIcon className="w-4 h-4" /> Copy this folder</div>
+                            </div>
+                            <div>
+                                <div className="font-semibold mb-1">Folders</div>
+                                <div className="pl-4">
+                                    <div className="cursor-pointer hover:underline font-semibold">Desktop</div>
+                                    <div className="pl-4 text-[#333]">Mathew</div>
                                 </div>
                             </div>
                         </div>
                         {/* Right Content */}
-                        <div className="flex-1 bg-white p-4 overflow-y-auto w-full shadow-inner">
-                            <div className="grid grid-cols-3 gap-8">
-                                <div className="flex items-center gap-2 cursor-pointer hover:bg-[#316ac5] hover:text-white p-1 rounded group">
-                                    <FolderIcon className="w-8 h-8 group-hover:brightness-110" />
-                                    <span className="truncate">Program Files</span>
+                        <div className="flex-1 bg-white p-6 overflow-y-auto w-full">
+                            <div className="grid grid-cols-4 gap-6">
+                                <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
+                                    <img src={ICONS.folder} className="w-12 h-12 drop-shadow" />
+                                    <span className="text-center text-xs truncate w-full">Program Files</span>
                                 </div>
-                                <div className="flex items-center gap-2 cursor-pointer hover:bg-[#316ac5] hover:text-white p-1 rounded group">
-                                    <FolderIcon className="w-8 h-8 group-hover:brightness-110" />
-                                    <span className="truncate">Windows</span>
+                                <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
+                                    <img src={ICONS.folder} className="w-12 h-12 drop-shadow" />
+                                    <span className="text-center text-xs truncate w-full">Windows</span>
                                 </div>
-                                <div className="flex items-center gap-2 cursor-pointer hover:bg-[#316ac5] hover:text-white p-1 rounded group">
-                                    <TextIcon className="w-8 h-8 group-hover:brightness-110" />
-                                    <span className="truncate">autoexec.bat</span>
+                                <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
+                                    <img src={ICONS.text} className="w-12 h-12 drop-shadow" />
+                                    <span className="text-center text-xs truncate w-full">autoexec.bat</span>
                                 </div>
-                                <div className="flex items-center gap-2 cursor-pointer hover:bg-[#316ac5] hover:text-white p-1 rounded group">
-                                    <TextIcon className="w-8 h-8 group-hover:brightness-110" />
-                                    <span className="truncate">Experience.txt</span>
+                                <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
+                                    <img src={ICONS.text} className="w-12 h-12 drop-shadow" />
+                                    <span className="text-center text-xs truncate w-full">Experience.txt</span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    {/* Details Pane */}
+                    <div className="h-12 bg-[#accbee] border-t border-white shadow-inner flex items-center px-4 text-[#1c4b8b] text-xs">
+                        <img src={ICONS.folder} className="w-8 h-8 mr-4 opacity-80" />
+                        <div>
+                            <div className="font-bold text-[14px]">Skills</div>
+                            <div>File Folder</div>
                         </div>
                     </div>
                 </div>
@@ -210,34 +228,38 @@ export default function DesktopWorkspace() {
     };
 
     return (
-        <div className="relative w-full h-screen overflow-hidden text-black font-sans bg-[#2a6db7]">
+        <div className="relative w-full h-screen overflow-hidden text-black font-sans bg-[#0c1f38]">
             {/* Background */}
             <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/windowsxpwallper.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }} />
 
             {/* Desktop Icons */}
             <div className="absolute top-6 left-4 flex flex-col gap-6 z-0">
-                {windows.map(win => (
-                    <div
-                        key={`icon-${win.id}`}
-                        className="flex flex-col items-center w-20 cursor-pointer group"
-                        onDoubleClick={() => openFromDesktop(win.id)}
-                    >
-                        <div className="mb-1 drop-shadow-md group-hover:drop-shadow-lg opacity-90 group-hover:opacity-100 flex items-center justify-center">
-                            {win.icon || <TextIcon className="w-10 h-10" />}
-                        </div>
-                        <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#0b5be8] px-1 rounded truncate w-full" style={{ textShadow: "1px 1px 2px black" }}>
-                            {win.title.replace('C:\\', 'My Computer').replace('*New Text Document.txt - Notepad', 'Experience.txt')}
-                        </div>
+                <div
+                    className="flex flex-col items-center w-24 cursor-pointer group"
+                    onDoubleClick={() => openFromDesktop('skills')}
+                >
+                    <img src={ICONS.computer} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" />
+                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full" style={{ textShadow: "1px 1px 2px black" }}>
+                        Computer
                     </div>
-                ))}
+                </div>
 
-                {/* Additional Desktop Icons */}
-                <div className="flex flex-col items-center w-20 cursor-pointer group">
-                    <div className="mb-1 drop-shadow-md group-hover:drop-shadow-lg opacity-90 group-hover:opacity-100 flex items-center justify-center">
-                        <FolderIcon className="w-10 h-10" />
+                <div
+                    className="flex flex-col items-center w-24 cursor-pointer group"
+                >
+                    <img src={ICONS.folder} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" />
+                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full" style={{ textShadow: "1px 1px 2px black" }}>
+                        User's Files
                     </div>
-                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#0b5be8] px-1 rounded truncate w-full" style={{ textShadow: "1px 1px 2px black" }}>
-                        My Documents
+                </div>
+
+                <div
+                    className="flex flex-col items-center w-24 cursor-pointer group"
+                    onDoubleClick={() => openFromDesktop('experience')}
+                >
+                    <img src={ICONS.text} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" />
+                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full" style={{ textShadow: "1px 1px 2px black" }}>
+                        Experience.txt
                     </div>
                 </div>
             </div>
@@ -261,53 +283,27 @@ export default function DesktopWorkspace() {
                 </Window>
             ))}
 
-            {/* XP Taskbar */}
-            <div
-                className="absolute bottom-0 left-0 right-0 h-[30px] flex items-center justify-between z-50 select-none"
-                style={{
-                    background: "linear-gradient(to bottom, #245edb 0%, #3f8cf3 9%, #245edb 18%, #245edb 92%, #1941a5 100%)",
-                    borderTop: "1px solid #0f2c80"
-                }}
-            >
-                <div className="flex flex-1 h-full items-center pl-[2px]">
-                    {/* Start Button */}
-                    <div
-                        className="h-[100%] italic text-xl shadow-lg hover:brightness-110 active:brightness-90 flex items-center justify-center gap-1 cursor-pointer pr-4 pl-2"
-                        style={{
-                            background: "linear-gradient(to bottom, #43a444 0%, #308630 100%)",
-                            boxShadow: "inset 0px 2px 2px rgba(255, 255, 255, 0.4), 2px 0px 3px rgba(0,0,0,0.5)",
-                            borderRadius: "0 12px 12px 0",
-                            color: "white",
-                            fontWeight: "bold",
-                            textShadow: "1px 1px 2px rgba(0,0,0,0.6)",
-                            borderRight: "1px solid #164627"
-                        }}
-                    >
-                        <LogoIcon className="w-5 h-5 drop-shadow-[1px_1px_1px_rgba(0,0,0,0.5)]" />
-                        <span className="text-[14px] leading-none mb-[2px]">start</span>
+            {/* Vista Taskbar */}
+            <div className="absolute bottom-0 left-0 right-0 h-[40px] vista-taskbar flex items-center justify-between z-50 select-none px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.5)]">
+
+                <div className="flex h-full items-center gap-2 flex-1">
+                    {/* Start Orb */}
+                    <div className="vista-start-orb shadow-[1px_1px_5px_rgba(0,0,0,0.8)]">
+                        <img src={ICONS.windowsLogo} className="w-6 h-6 object-contain" alt="Start" />
                     </div>
 
                     {/* Window Tabs */}
-                    <div className="flex-1 flex gap-1 px-3 h-[85%] overflow-hidden items-center">
+                    <div className="flex gap-1 h-[75%] items-center ml-2 border-l border-white/20 pl-2">
                         {windows.filter(w => w.isOpen).map(win => {
                             const isActive = activeWindowId === win.id && !win.isMinimized;
                             return (
                                 <button
                                     key={`taskbar-${win.id}`}
                                     onClick={() => toggleWindow(win.id)}
-                                    className={`h-full min-w-[120px] max-w-[160px] px-2 text-left text-xs truncate flex items-center gap-2 text-white overflow-hidden rounded-sm ${isActive ? 'active' : ''}`}
-                                    style={{
-                                        background: isActive ? "linear-gradient(to bottom, #1b4ea8 0%, #2665ce 100%)" : "linear-gradient(to bottom, #3780e5 0%, #3376d4 100%)",
-                                        boxShadow: isActive ? "inset 2px 2px 4px rgba(0,0,0,0.5)" : "inset 1px 1px 1px rgba(255,255,255,0.3)",
-                                        border: isActive ? "1px solid #143e8c" : "1px solid #2358b5"
-                                    }}
+                                    className={`vista-taskbar-item h-full min-w-[140px] max-w-[160px] px-2 flex items-center gap-2 ${isActive ? 'active' : ''}`}
                                 >
-                                    <div className="w-4 h-4 flex-shrink-0 flex items-center justify-center">
-                                        {win.icon || (win.id === 'experience' ? <TextIcon className="w-4 h-4" /> :
-                                            win.id === 'skills' ? <ComputerIcon className="w-4 h-4" /> :
-                                                <FolderIcon className="w-4 h-4" />)}
-                                    </div>
-                                    <span className="truncate leading-none pt-[2px]">{win.title}</span>
+                                    <img src={win.iconUrl || ICONS.folder} className="w-5 h-5 drop-shadow" />
+                                    <span className="truncate text-xs text-white">{win.title}</span>
                                 </button>
                             );
                         })}
@@ -315,18 +311,12 @@ export default function DesktopWorkspace() {
                 </div>
 
                 {/* System Tray */}
-                <div
-                    className="h-full px-4 flex items-center gap-3 text-white text-xs border-l border-[#1c52b2]"
-                    style={{
-                        background: "linear-gradient(to bottom, #128ce8 0%, #0d9ff4 40%, #1783cf 80%, #0c4ea4 100%)",
-                        boxShadow: "inset 1px 0px 1px rgba(255,255,255,0.4)"
-                    }}
-                >
-                    <div className="flex items-center gap-2 cursor-pointer">
-                        <span title="Windows Security" className="bg-red-500 rounded-full w-3 h-3 flex items-center justify-center text-[8px] border border-white">!</span>
+                <div className="flex items-center gap-3 text-white text-xs h-[75%] px-3 border-l border-white/20">
+                    <div className="flex items-center gap-2 cursor-pointer opacity-80 hover:opacity-100">
+                        <span title="Network">💻</span>
                         <span title="Volume">🔊</span>
                     </div>
-                    <span className="font-sans ml-1 text-[11px] pt-[1px]">{time}</span>
+                    <span className="font-sans ml-1 text-xs">{time}</span>
                 </div>
             </div>
         </div>

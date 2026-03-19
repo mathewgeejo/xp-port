@@ -181,4 +181,146 @@
     background: linear-gradient(180deg, #1b4ea8 0%, #2665ce 100%);
     box-shadow: inset 2px 2px 3px rgba(0, 0, 0, 0.5);
   }
+
+  :root {
+    /* Vista Aero Theme Variables */
+    --vista-glass-bg: rgba(255, 255, 255, 0.4);
+    --vista-glass-border: rgba(255, 255, 255, 0.6);
+    --vista-glass-shadow: rgba(0, 0, 0, 0.4);
+    --vista-title-glow: 0 0 8px rgba(255, 255, 255, 0.8);
+    --vista-taskbar-bg-top: rgba(20, 20, 20, 0.8);
+    --vista-taskbar-bg-bottom: rgba(0, 0, 0, 0.95);
+    --vista-taskbar-border: rgba(255, 255, 255, 0.2);
+  }
+
+  .vista-window {
+    background: var(--vista-glass-bg);
+    border: 1px solid var(--vista-glass-border);
+    box-shadow: 0 4px 16px var(--vista-glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 1px 0 0 rgba(255, 255, 255, 0.5), inset -1px 0 0 rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 8px;
+    overflow: visible !important;
+  }
+
+  .vista-titlebar {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 8px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    cursor: grab;
+    position: relative;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.1) 40%, rgba(255, 255, 255, 0) 41%, rgba(255, 255, 255, 0.2) 100%);
+  }
+
+  .vista-title-text {
+    color: #111;
+    font-weight: 600;
+    text-shadow: var(--vista-title-glow);
+    font-family: inherit;
+    letter-spacing: 0.5px;
+  }
+
+  .vista-btn {
+    width: 28px;
+    height: 18px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 45%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.3) 100%);
+    transition: all 0.1s;
+  }
+
+  .vista-btn:hover {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.5) 0%, rgba(100, 200, 255, 0.4) 45%, rgba(0, 100, 200, 0.5) 50%, rgba(50, 150, 255, 0.6) 100%);
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 4px rgba(100, 200, 255, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .vista-btn-close {
+    width: 42px;
+    border-bottom-left-radius: 6px;
+    border-color: rgba(255, 100, 100, 0.6);
+    background: linear-gradient(to bottom, rgba(255, 100, 100, 0.4) 0%, rgba(200, 50, 50, 0.6) 45%, rgba(150, 0, 0, 0.8) 50%, rgba(200, 0, 0, 0.6) 100%);
+  }
+
+  .vista-btn-close:hover {
+    background: linear-gradient(to bottom, rgba(255, 150, 150, 0.6) 0%, rgba(255, 50, 50, 0.8) 45%, rgba(255, 0, 0, 0.9) 50%, rgba(255, 50, 50, 0.8) 100%);
+    border-color: rgba(255, 200, 200, 0.9);
+    box-shadow: 0 0 6px rgba(255, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+
+  .vista-taskbar {
+    background: linear-gradient(to bottom, var(--vista-taskbar-bg-top) 0%, rgba(0, 0, 0, 0.8) 45%, var(--vista-taskbar-bg-bottom) 100%);
+    border-top: 1px solid var(--vista-taskbar-border);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .vista-start-orb {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(to bottom, #2b7bc4 0%, #15428a 50%, #09285c 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.6), 0 2px 6px rgba(0, 0, 0, 0.6);
+    position: relative;
+    top: -6px;
+    left: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 60;
+  }
+
+  .vista-start-orb::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 10%;
+    width: 80%;
+    height: 40%;
+    background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50% 50% 0 0;
+  }
+
+  .vista-start-orb:hover {
+    background: linear-gradient(to bottom, #3b8cf4 0%, #25529a 50%, #19386c 100%);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 2px 10px rgba(100, 200, 255, 0.8);
+  }
+
+  .vista-taskbar-item {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 45%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.1) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    transition: all 0.1s;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
+  .vista-taskbar-item:hover {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 45%, rgba(100, 200, 255, 0.2) 50%, rgba(50, 150, 255, 0.3) 100%);
+    border-color: rgba(100, 200, 255, 0.4);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 0 8px rgba(100, 200, 255, 0.2);
+  }
+
+  .vista-taskbar-item.active {
+    background: linear-gradient(to bottom, rgba(200, 230, 255, 0.3) 0%, rgba(100, 180, 255, 0.2) 45%, rgba(50, 150, 255, 0.4) 50%, rgba(20, 100, 200, 0.5) 100%);
+    border-color: rgba(100, 200, 255, 0.6);
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), inset 0 -1px 2px rgba(0, 0, 0, 0.4);
+  }
 }

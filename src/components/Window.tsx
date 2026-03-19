@@ -94,11 +94,11 @@ export default function Window({
     );
   }
 
-  // Render Windows XP Style Window
+  // Render Windows Vista Style Window
   return (
     <div
       ref={windowRef}
-      className={`absolute flex flex-col pointer-events-auto xp-window shadow-xl`}
+      className={`absolute flex flex-col pointer-events-auto vista-window`}
       style={{
         left: `${position.x}px`,
         top: `${position.y}px`,
@@ -110,27 +110,27 @@ export default function Window({
     >
       {/* Title Bar */}
       <div
-        className="xp-titlebar"
+        className="vista-titlebar"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        <div className="xp-titlebar-content">
-          <span className="truncate">{title}</span>
+        <div className="flex-1 flex items-center pl-2">
+          <span className="vista-title-text truncate">{title}</span>
         </div>
-        <div className="xp-button-group">
+        <div className="flex gap-[2px] pr-1">
           {onMinimize && (
             <button
               onClick={(e) => { e.stopPropagation(); onMinimize(id); }}
-              className="xp-icon-btn xp-btn-sys pb-2"
+              className="vista-btn pb-2"
               aria-label="Minimize"
             >
               _
             </button>
           )}
           <button
-            className="xp-icon-btn xp-btn-sys"
+            className="vista-btn"
             aria-label="Maximize"
           >
             □
@@ -138,17 +138,17 @@ export default function Window({
           {onClose && (
             <button
               onClick={(e) => { e.stopPropagation(); onClose(id); }}
-              className="xp-icon-btn xp-btn-close"
+              className="vista-btn vista-btn-close"
               aria-label="Close"
             >
-              x
+              X
             </button>
           )}
         </div>
       </div>
 
       {/* Content Area */}
-      <div className="xp-content-area bg-white text-black">
+      <div className="flex-1 overflow-hidden bg-white text-black m-1 mb-2 rounded-sm border border-gray-400 shadow-inner">
         {children}
       </div>
     </div>
