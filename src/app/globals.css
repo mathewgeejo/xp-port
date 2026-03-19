@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --retro-bg: #5fa4a1;
+    /* Classic desktop fallback */
+
+    /* XP Luna Blue Theme Variables */
+    --xp-window-bg: #ece9d8;
+    --xp-title-gradient-top: #0058e6;
+    --xp-title-gradient-bottom: #3a93ff;
+    --xp-title-text: #ffffff;
+    --xp-border-blue: #003399;
+    --xp-border-blue-light: #0054e3;
+
+    /* Buttons */
+    --xp-close-gradient-top: #ff756f;
+    --xp-close-gradient-bottom: #cd3128;
+    --xp-sys-btn-gradient-top: #a6cbf0;
+    --xp-sys-btn-gradient-bottom: #2151d0;
+
+    --terminal-bg: #000000;
+    --terminal-text: #00ff00;
+    --font-pixel: 'Courier New', Courier, monospace;
+    /* Placeholder for pixel font */
+  }
+
+  body {
+    background-color: var(--retro-bg);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /* Desktop shouldn't scroll */
+    font-family: Tahoma, 'Segoe UI', Arial, sans-serif;
+    /* XP default */
+    -webkit-font-smoothing: none;
+  }
+}
+
+@layer components {
+
+  /* Mac OS style window border - keeping for fallback if needed */
+  .mac-window {
+    border: 1px solid #000;
+    box-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+    background: #fff;
+  }
+
+  .mac-titlebar {
+    background: repeating-linear-gradient(to bottom,
+        #fff,
+        #fff 1px,
+        #000 1px,
+        #000 2px);
+    border-bottom: 1px solid #000;
+  }
+
+  /* XP Luna Window Styling */
+  .xp-window {
+    background-color: var(--xp-window-bg);
+    border: 3px solid var(--xp-border-blue-light);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .xp-titlebar {
+    background: linear-gradient(180deg, var(--xp-title-gradient-top) 0%, var(--xp-title-gradient-bottom) 10%, var(--xp-title-gradient-bottom) 90%, var(--xp-title-gradient-top) 100%);
+    color: var(--xp-title-text);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 6px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    cursor: grab;
+    user-select: none;
+  }
+
+  .xp-titlebar:active {
+    cursor: grabbing;
+  }
+
+  .xp-titlebar-content {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+  }
+
+  .xp-button-group {
+    display: flex;
+    gap: 2px;
+  }
+
+  .xp-icon-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 3px;
+    border: 1px solid white;
+    box-shadow: inset 0px -1px 2px rgba(0, 0, 0, 0.3);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-shadow: none;
+  }
+
+  .xp-btn-sys {
+    background: linear-gradient(to bottom, var(--xp-sys-btn-gradient-top), var(--xp-sys-btn-gradient-bottom));
+    border-color: #fff #2c59a3 #2c59a3 #fff;
+  }
+
+  .xp-btn-sys:active {
+    background: var(--xp-sys-btn-gradient-bottom);
+    box-shadow: inset 2px 2px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  .xp-btn-close {
+    background: linear-gradient(to bottom, var(--xp-close-gradient-top), var(--xp-close-gradient-bottom));
+    border-color: #ffcccc #8a1309 #8a1309 #ffcccc;
+  }
+
+  .xp-btn-close:active {
+    background: var(--xp-close-gradient-bottom);
+    box-shadow: inset 2px 2px 3px rgba(0, 0, 0, 0.5);
+  }
+
+  .xp-content-area {
+    background-color: transparent;
+    border: none;
+    flex: 1;
+    overflow: auto;
+    display: flex;
+  }
+
+  /* XP Taskbar */
+  .xp-taskbar {
+    background: linear-gradient(180deg, #245edb 0%, #3f8cf3 9%, #245edb 18%, #245edb 92%, #1941a5 100%);
+    border-top: 1px solid #0f2c80;
+  }
+
+  .xp-start-btn {
+    background: linear-gradient(180deg, #43a444 0%, #308630 100%);
+    box-shadow: inset 0px 2px 2px rgba(255, 255, 255, 0.4), 2px 0px 3px rgba(0, 0, 0, 0.5);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-style: italic;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  }
+
+  .xp-start-btn:hover {
+    background: linear-gradient(180deg, #4cb84e 0%, #3a9c3a 100%);
+  }
+
+  .xp-system-tray {
+    background: linear-gradient(180deg, #128ce8 0%, #0d9ff4 40%, #1783cf 80%, #0c4ea4 100%);
+    border-left: 1px solid #1c52b2;
+    box-shadow: inset 1px 0px 1px rgba(255, 255, 255, 0.3);
+  }
+
+  .xp-taskbar-item {
+    background: linear-gradient(180deg, #3780e5 0%, #3376d4 100%);
+    border-radius: 3px;
+    box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.4), inset -1px -1px 1px rgba(0, 0, 0, 0.3);
+    color: white;
+  }
+
+  .xp-taskbar-item.active {
+    background: linear-gradient(180deg, #1b4ea8 0%, #2665ce 100%);
+    box-shadow: inset 2px 2px 3px rgba(0, 0, 0, 0.5);
+  }
+}
