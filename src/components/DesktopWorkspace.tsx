@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import Window from './Window';
+import dynamic from 'next/dynamic';
+
+const Terminal = dynamic(() => import('./Terminal'), { ssr: false });
+const FileManager = dynamic(() => import('./FileManager'), { ssr: false });
 
 type WindowData = {
     id: string;
@@ -282,6 +286,28 @@ export default function DesktopWorkspace() {
                     </div>
                 </div>
             )
+        },
+        {
+            id: 'cmd',
+            title: 'Command Prompt',
+            iconUrl: ICONS.terminal,
+            initialX: 120,
+            initialY: 80,
+            width: 680,
+            height: 420,
+            isOpen: false,
+            component: <Terminal />
+        },
+        {
+            id: 'filemanager',
+            title: 'Windows Explorer',
+            iconUrl: ICONS.computer,
+            initialX: 200,
+            initialY: 60,
+            width: 750,
+            height: 500,
+            isOpen: false,
+            component: <FileManager initialPath="/C:" />
         }
     ]);
 
@@ -362,7 +388,7 @@ export default function DesktopWorkspace() {
                     </div>
                 </div>
 
-                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('skills')}>
+                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('filemanager')}>
                     <img src={ICONS.computer} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="Computer" />
                     <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
                         My Computer
@@ -384,31 +410,40 @@ export default function DesktopWorkspace() {
                 </div>
 
                 <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('contact')}>
-                    <img src={ICONS.mail} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="Terminal" />
+                    <img src={ICONS.mail} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="Mail" />
                     <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
                         Contact Me
+                    </div>
+                </div>
+
+                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('cmd')}>
+                    <img src={ICONS.terminal} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="CMD" />
+                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
+                        Command Prompt
                     </div>
                 </div>
             </div>
 
             {/* Windows */}
-            {windows.map(win => win.isOpen && !win.isMinimized && (
-                <Window
-                    key={win.id}
-                    id={win.id}
-                    title={win.title}
-                    initialX={win.initialX}
-                    initialY={win.initialY}
-                    width={win.width}
-                    height={win.height}
-                    zIndex={zIndexes[win.id] || 1}
-                    onFocus={bringToFront}
-                    onClose={closeWindow}
-                    onMinimize={minimizeWindow}
-                >
-                    {win.component}
-                </Window>
-            ))}
+            {
+                windows.map(win => win.isOpen && !win.isMinimized && (
+                    <Window
+                        key={win.id}
+                        id={win.id}
+                        title={win.title}
+                        initialX={win.initialX}
+                        initialY={win.initialY}
+                        width={win.width}
+                        height={win.height}
+                        zIndex={zIndexes[win.id] || 1}
+                        onFocus={bringToFront}
+                        onClose={closeWindow}
+                        onMinimize={minimizeWindow}
+                    >
+                        {win.component}
+                    </Window>
+                ))
+            }
 
             {/* Vista Taskbar */}
             <div className="absolute bottom-0 left-0 right-0 h-[40px] vista-taskbar flex items-center justify-between z-50 select-none px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.5)]">
@@ -446,6 +481,6 @@ export default function DesktopWorkspace() {
                     <span className="font-sans text-xs drop-shadow-md" style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.8)" }}>{time}</span>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }
