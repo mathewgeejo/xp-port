@@ -28,13 +28,15 @@ const Svgs = {
 };
 
 const ICONS = {
-    computer: "https://upload.wikimedia.org/wikipedia/commons/e/e1/Oxygen480-devices-computer.svg",
-    folder: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Oxygen480-places-folder.svg",
-    text: "https://upload.wikimedia.org/wikipedia/commons/9/91/Oxygen480-mimetypes-text-x-generic.svg",
-    terminal: "https://upload.wikimedia.org/wikipedia/commons/3/36/Oxygen480-apps-utilities-terminal.svg",
-    windowsLogo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/Windows_Vista_logo.svg/512px-Windows_Vista_logo.svg.png",
-    mail: "https://upload.wikimedia.org/wikipedia/commons/4/4e/Mail_%28iOS%29.svg",
-    info: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Infobox_info_icon.svg",
+    // Local uploaded icons
+    computer: "/icons/monitor.png",
+    folder: "/icons/floppy.png",
+    text: "/icons/floppy.png", // Reusing the high-quality floppy upload for text files
+    terminal: "/icons/gear.png", // Utilizing gear for settings/terminal
+
+    windowsLogo: "/icons/windows-logo.svg",
+    mail: "/icons/mail.svg",
+    info: "/icons/clock.png", // Repurposing clock upload for Welcome Center info
 };
 
 export default function DesktopWorkspace() {
