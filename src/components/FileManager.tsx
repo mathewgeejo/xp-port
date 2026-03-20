@@ -226,7 +226,7 @@ export default function FileManager({ initialPath = '/home/user' }: FileManagerP
         else if (e.key === 'a' && e.ctrlKey) { e.preventDefault(); setSelected(new Set(getItems().map(i => i.name))); }
     };
 
-    useEffect(() => { const h = () => setCtxMenu(null); document.addEventListener('click', h); return () => document.removeEventListener('click', h); }, []);
+    useEffect(() => { const h = (e: MouseEvent) => { const t = e.target as HTMLElement; if (!t.closest('[data-ctx-menu]')) setCtxMenu(null); }; document.addEventListener('click', h); return () => document.removeEventListener('click', h); }, []);
 
     // === File Editor Overlay ===
     if (editFile) {
@@ -424,7 +424,7 @@ export default function FileManager({ initialPath = '/home/user' }: FileManagerP
 
             {/* Context Menu */}
             {ctxMenu && (
-                <div className="fixed bg-white border border-gray-400 shadow-md py-1 z-[9999]" style={{ left: ctxMenu.x, top: ctxMenu.y, fontFamily: 'Tahoma, sans-serif', fontSize: '11px' }} onClick={(e) => e.stopPropagation()}>
+                <div data-ctx-menu className="fixed bg-white border border-gray-400 shadow-md py-1 z-[9999]" style={{ left: ctxMenu.x, top: ctxMenu.y, fontFamily: 'Tahoma, sans-serif', fontSize: '11px' }} onClick={(e) => e.stopPropagation()}>
                     {ctxMenu.item ? (<>
                         <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer font-bold" onClick={() => { if (ctxMenu.item) handleDblClick(ctxMenu.item); setCtxMenu(null); }}>Open</div>
                         <div className="border-t border-gray-200 my-[2px]" />

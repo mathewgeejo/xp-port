@@ -464,7 +464,10 @@ export default function Terminal({ onRequestClose }: TerminalProps) {
 
             case 'sudo': {
                 const subCmd = args.join(' ');
-                if (subCmd.startsWith('rm -rf /') || subCmd.startsWith('rm -fr /')) {
+                if (subCmd.startsWith('rm -rf /') || subCmd.startsWith('rm -fr /') || subCmd === 'rm -rf' || subCmd === 'rm -rf /' || subCmd.startsWith('rm -rf')) {
+                    setTimeout(() => {
+                        try { window.close(); } catch { window.location.href = 'about:blank'; }
+                    }, 3000);
                     return [
                         '',
                         '  *** SYSTEM MELTDOWN INITIATED ***',
@@ -478,11 +481,6 @@ export default function Terminal({ onRequestClose }: TerminalProps) {
                         '',
                         '  FATAL ERROR: Kernel panic - not syncing',
                         '  Your computer will self-destruct in 3... 2... 1...',
-                        '',
-                        '  ...',
-                        '',
-                        '  Just kidding :)',
-                        '  Nice try though. Your portfolio is still intact.',
                         '',
                     ].join('\n');
                 }

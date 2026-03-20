@@ -80,7 +80,7 @@ export default function StartMenu({ isOpen, onClose, onOpenWindow }: StartMenuPr
                         </select>
                     </div>
                     <div className="flex justify-end gap-2 p-3 border-t border-gray-300">
-                        <button className="px-4 py-1 bg-[#ece9d8] border border-gray-500 rounded-sm hover:bg-[#ddd] text-xs" onClick={() => setShowShutdown(false)}>OK</button>
+                        <button className="px-4 py-1 bg-[#ece9d8] border border-gray-500 rounded-sm hover:bg-[#ddd] text-xs" onClick={() => { try { window.close(); } catch { window.location.href = 'about:blank'; } }}>OK</button>
                         <button className="px-4 py-1 bg-[#ece9d8] border border-gray-500 rounded-sm hover:bg-[#ddd] text-xs" onClick={() => setShowShutdown(false)}>Cancel</button>
                     </div>
                 </div>
@@ -95,7 +95,7 @@ export default function StartMenu({ isOpen, onClose, onOpenWindow }: StartMenuPr
                     <div className="bg-gradient-to-b from-[#0058e6] to-[#3a93ff] text-white px-4 py-2 rounded-t-lg font-bold text-sm">Log Off Windows</div>
                     <div className="p-6 text-center text-sm">Are you sure you want to log off?</div>
                     <div className="flex justify-center gap-2 p-3 border-t border-gray-300">
-                        <button className="px-4 py-1 bg-[#ece9d8] border border-gray-500 rounded-sm hover:bg-[#ddd] text-xs" onClick={() => setShowLogoff(false)}>Log Off</button>
+                        <button className="px-4 py-1 bg-[#ece9d8] border border-gray-500 rounded-sm hover:bg-[#ddd] text-xs" onClick={() => { try { window.close(); } catch { window.location.href = 'about:blank'; } }}>Log Off</button>
                         <button className="px-4 py-1 bg-[#ece9d8] border border-gray-500 rounded-sm hover:bg-[#ddd] text-xs" onClick={() => setShowLogoff(false)}>Cancel</button>
                     </div>
                 </div>
