@@ -393,12 +393,12 @@ export default function DesktopWorkspace() {
                 </div>
 
                 {/* System Tray */}
-                <div className="flex items-center gap-2 text-white text-xs h-[75%] px-3 border-l border-white/20">
-                    <div className="flex items-center gap-2 cursor-pointer opacity-90 hover:opacity-100 mr-2">
+                <div className="flex items-center gap-3 text-white text-[13px] h-full px-4 border-l border-white/20 hover:bg-white/10 cursor-pointer transition-colors" title="Network, Volume, Time">
+                    <div className="flex items-center gap-2 opacity-90 drop-shadow-md">
                         <Svgs.Network />
                         <Svgs.Volume />
                     </div>
-                    <span className="font-sans text-xs drop-shadow-md" style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.8)" }}>{time}</span>
+                    <span className="font-sans font-medium drop-shadow-md" style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.8)" }}>{time}</span>
                 </div>
             </div>
         </div>

@@ -445,14 +445,14 @@ export default function FileManager({ initialPath = '/home/user' }: FileManagerP
                             New &gt;
                             {ctxMenu.showNewSub && (
                                 <div className="absolute left-full top-0 bg-white border border-gray-400 shadow-md py-1 z-[10000] w-44">
-                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={() => createNew('')}>Folder</div>
+                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={(e) => { e.stopPropagation(); createNew(''); }}>Folder</div>
                                     <div className="border-t border-gray-200 my-[2px]" />
-                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={() => createNew('txt')}>Text Document (.txt)</div>
-                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={() => createNew('md')}>Markdown File (.md)</div>
-                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={() => createNew('py')}>Python File (.py)</div>
-                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={() => createNew('js')}>JavaScript File (.js)</div>
-                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={() => createNew('bat')}>Batch File (.bat)</div>
-                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={() => createNew('rtf')}>Rich Text (.rtf)</div>
+                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={(e) => { e.stopPropagation(); createNew('txt'); }}>Text Document (.txt)</div>
+                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={(e) => { e.stopPropagation(); createNew('md'); }}>Markdown File (.md)</div>
+                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={(e) => { e.stopPropagation(); createNew('py'); }}>Python File (.py)</div>
+                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={(e) => { e.stopPropagation(); createNew('js'); }}>JavaScript File (.js)</div>
+                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={(e) => { e.stopPropagation(); createNew('bat'); }}>Batch File (.bat)</div>
+                                    <div className="px-4 py-[2px] hover:bg-[#316ac5] hover:text-white cursor-pointer" onClick={(e) => { e.stopPropagation(); createNew('rtf'); }}>Rich Text (.rtf)</div>
                                 </div>
                             )}
                         </div>
