@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 
 interface WindowProps {
   id: string;
@@ -23,15 +23,16 @@ export default function Window({
 }: WindowProps) {
   const [position, setPosition] = useState({ x: initialX, y: initialY });
   const [isDragging, setIsDragging] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
+  const [preMaxState, setPreMaxState] = useState({ x: initialX, y: initialY, w: width, h: height });
   const dragOffset = useRef({ x: 0, y: 0 });
   const windowRef = useRef<HTMLDivElement>(null);
 
   const handlePointerDown = (e: React.PointerEvent) => {
-    // Only drag from title bar
+    if (isMaximized) return; // Don't drag when maximized
     onFocus(id);
     (e.target as HTMLElement).setPointerCapture(e.pointerId);
     setIsDragging(true);
-
     dragOffset.current = {
       x: e.clientX - position.x,
       y: e.clientY - position.y
@@ -40,12 +41,10 @@ export default function Window({
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
-
-    // Calculate new position
-    const newX = e.clientX - dragOffset.current.x;
-    const newY = e.clientY - dragOffset.current.y;
-
-    setPosition({ x: newX, y: newY });
+    setPosition({
+      x: e.clientX - dragOffset.current.x,
+      y: e.clientY - dragOffset.current.y
+    });
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
@@ -54,7 +53,22 @@ export default function Window({
     (e.target as HTMLElement).releasePointerCapture(e.pointerId);
   };
 
-  // Render Mac OS Style Window
+  const toggleMaximize = () => {
+    if (isMaximized) {
+      setPosition({ x: preMaxState.x, y: preMaxState.y });
+      setIsMaximized(false);
+    } else {
+      setPreMaxState({ x: position.x, y: position.y, w: width, h: height });
+      setPosition({ x: 0, y: 0 });
+      setIsMaximized(true);
+    }
+  };
+
+  const handleTitleDoubleClick = () => {
+    toggleMaximize();
+  };
+
+  // Mac OS Style
   if (isMacStyle) {
     return (
       <div
@@ -94,18 +108,29 @@ export default function Window({
     );
   }
 
-  // Render Windows Vista Style Window
+  // Vista Style - with maximize support
+  const windowStyle: React.CSSProperties = isMaximized
+    ? {
+      left: 0,
+      top: 0,
+      width: '100vw',
+      height: 'calc(100vh - 40px)', // Leave room for taskbar
+      zIndex,
+      borderRadius: 0,
+    }
+    : {
+      left: `${position.x}px`,
+      top: `${position.y}px`,
+      width: width || 'auto',
+      height: height || 'auto',
+      zIndex,
+    };
+
   return (
     <div
       ref={windowRef}
       className={`absolute flex flex-col pointer-events-auto vista-window`}
-      style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        width: width || 'auto',
-        height: height || 'auto',
-        zIndex,
-      }}
+      style={windowStyle}
       onPointerDown={() => onFocus(id)}
     >
       {/* Title Bar */}
@@ -115,6 +140,7 @@ export default function Window({
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        onDoubleClick={handleTitleDoubleClick}
       >
         <div className="flex-1 flex items-center pl-2">
           <span className="vista-title-text truncate">{title}</span>
@@ -132,8 +158,9 @@ export default function Window({
           <button
             className="vista-btn"
             aria-label="Maximize"
+            onClick={(e) => { e.stopPropagation(); toggleMaximize(); }}
           >
-            □
+            {isMaximized ? '\u29C9' : '\u25A1'}
           </button>
           {onClose && (
             <button

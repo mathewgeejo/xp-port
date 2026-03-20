@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Window from './Window';
 import dynamic from 'next/dynamic';
 
@@ -32,16 +32,60 @@ const Svgs = {
 };
 
 const ICONS = {
-    // Local uploaded icons
     computer: "/icons/monitor.png",
     folder: "/icons/floppy.png",
-    text: "/icons/floppy.png", // Reusing the high-quality floppy upload for text files
-    terminal: "/icons/gear.png", // Utilizing gear for settings/terminal
-
+    text: "/icons/floppy.png",
+    terminal: "/icons/gear.png",
     windowsLogo: "/icons/windows-logo.svg",
     mail: "/icons/mail.svg",
-    info: "/icons/clock.png", // Repurposing clock upload for Welcome Center info
+    info: "/icons/clock.png",
 };
+
+// Draggable Desktop Icon component
+function DesktopIcon({ icon, label, onDoubleClick, initialPos }: {
+    icon: string; label: string; onDoubleClick: () => void;
+    initialPos: { x: number; y: number };
+}) {
+    const [pos, setPos] = useState(initialPos);
+    const [dragging, setDragging] = useState(false);
+    const offset = useRef({ x: 0, y: 0 });
+    const moved = useRef(false);
+
+    const handlePointerDown = (e: React.PointerEvent) => {
+        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        setDragging(true);
+        moved.current = false;
+        offset.current = { x: e.clientX - pos.x, y: e.clientY - pos.y };
+    };
+
+    const handlePointerMove = (e: React.PointerEvent) => {
+        if (!dragging) return;
+        moved.current = true;
+        setPos({ x: e.clientX - offset.current.x, y: e.clientY - offset.current.y });
+    };
+
+    const handlePointerUp = (e: React.PointerEvent) => {
+        setDragging(false);
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    };
+
+    return (
+        <div
+            className="absolute flex flex-col items-center w-[76px] cursor-pointer group select-none"
+            style={{ left: pos.x, top: pos.y, zIndex: dragging ? 100 : 0 }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+            onDoubleClick={(e) => { if (!moved.current) onDoubleClick(); }}
+        >
+            <img src={icon} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt={label} draggable={false} />
+            <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui] leading-tight" style={{ textShadow: "1px 1px 2px black" }}>
+                {label}
+            </div>
+        </div>
+    );
+}
 
 export default function DesktopWorkspace() {
     const [windows, setWindows] = useState<WindowData[]>([
@@ -59,12 +103,6 @@ export default function DesktopWorkspace() {
                     <div>Microsoft Windows [Version 6.0.6002]</div>
                     <div>Copyright (c) 2006 Microsoft Corporation.  All rights reserved.</div>
                     <br />
-                    <div>1 #</div>
-                    <div>2 #</div>
-                    <div>3 # <span className="text-white text-3xl font-bold tracking-widest pl-4">JUAN</span></div>
-                    <div>4 #</div>
-                    <div>5 # <span className="text-white text-3xl font-bold tracking-widest pl-4">HUERTA</span></div>
-                    <div className="text-center text-xs mt-2 text-white">------ NET SENIOR SOFTWARE DEVELOPER ------</div>
                     <div className="mt-4 flex items-center">
                         <span>C:\Users\Mathew&gt; </span>
                         <div className="w-2 h-4 bg-white ml-1 animate-pulse" />
@@ -91,7 +129,7 @@ export default function DesktopWorkspace() {
                         <span className="px-2 hover:bg-[#c2d7f1] cursor-pointer rounded">Help</span>
                     </div>
                     <div className="flex-1 p-2 font-mono scrollbar-hide overflow-auto whitespace-pre-wrap outline-none" contentEditable suppressContentEditableWarning>
-                        {`yeah dudes promise this is windows vista\n\ncheck the fine print in winver :)\n\n-- WORK EXPERIENCE --\nUniversal Postal Union | Senior Software Developer | Oct 2013 - Present\n- Lead Architecture & Development\n- Mentored agile practices\n`}
+                        {`-- WORK EXPERIENCE --\n\nMathew Geejo\nFrontend Developer & UI/UX Designer\n\nUniversal Postal Union | Senior Software Developer | Oct 2013 - Present\n- Lead Architecture & Development\n- Mentored agile practices\n- Built enterprise-scale web applications\n\nPrevious Roles:\n- Full Stack Developer at TechCorp (2010-2013)\n- Junior Developer at StartupXYZ (2008-2010)\n`}
                     </div>
                 </div>
             )
@@ -102,85 +140,10 @@ export default function DesktopWorkspace() {
             iconUrl: ICONS.folder,
             initialX: 160,
             initialY: 160,
-            width: 650,
-            height: 400,
+            width: 750,
+            height: 500,
             isOpen: false,
-            component: (
-                <div className="w-full h-full bg-[#f0f4f9] flex flex-col font-sans text-sm text-black">
-                    {/* Vista Explorer Header */}
-                    <div className="flex items-center px-2 py-2 gap-2 bg-[#d7e4f5] border-b border-white">
-                        <div className="flex gap-1">
-                            <div className="w-7 h-7 rounded-full bg-[#c9daf1] flex items-center justify-center border border-[#abbbe0] cursor-pointer text-[#1c4b8b] hover:bg-[#d8eaf9]"><Svgs.Back /></div>
-                            <div className="w-7 h-7 rounded-full bg-[#c9daf1] flex items-center justify-center border border-[#abbbe0] cursor-pointer text-[#1c4b8b] hover:bg-[#d8eaf9]"><Svgs.Forward /></div>
-                        </div>
-                        <div className="flex-1 flex px-2 py-[2px] bg-white border border-[#abbbe0] rounded items-center gap-2 shadow-inner">
-                            <img src={ICONS.folder} className="w-4 h-4" alt="folder" /> <span>Computer ▸ C: ▸ Users ▸ Mathew ▸ Skills</span>
-                        </div>
-                        <div className="flex px-2 py-[2px] bg-white border border-[#abbbe0] rounded items-center gap-2 w-48 shadow-inner text-[#a0a0a0]">
-                            <span className="w-full">Search Skills</span> <Svgs.Search />
-                        </div>
-                    </div>
-                    {/* Command bar */}
-                    <div className="flex px-3 py-2 bg-[#f0f4f9] border-b border-[#d8e2f1] text-[#1c4b8b] text-xs gap-4">
-                        <span className="cursor-pointer hover:underline flex items-center gap-1">Organize</span>
-                        <span className="cursor-pointer hover:underline flex items-center gap-1">Views</span>
-                        <span className="cursor-pointer hover:underline flex items-center gap-1">Burn</span>
-                    </div>
-
-                    {/* Main Content Pane */}
-                    <div className="flex flex-1 overflow-hidden bg-white shadow-inner">
-                        {/* Sidebar */}
-                        <div className="w-48 bg-[#f5f8fc] border-r border-[#d8e2f1] p-3 overflow-y-auto text-sm text-[#1e395b]">
-                            <div className="mb-4">
-                                <div className="font-semibold mb-1">Favorite Links</div>
-                                <div className="pl-4 space-y-1">
-                                    <div className="cursor-pointer hover:underline">Documents</div>
-                                    <div className="cursor-pointer hover:underline">Pictures</div>
-                                    <div className="cursor-pointer hover:underline">Music</div>
-                                    <div className="cursor-pointer hover:underline">Recently Changed</div>
-                                    <div className="cursor-pointer hover:underline">Searches</div>
-                                </div>
-                            </div>
-                            <div>
-                                <div className="font-semibold mb-1">Folders</div>
-                                <div className="pl-4">
-                                    <div className="cursor-pointer hover:underline font-semibold">Desktop</div>
-                                    <div className="pl-4 text-[#333]">Mathew</div>
-                                </div>
-                            </div>
-                        </div>
-                        {/* Right Content */}
-                        <div className="flex-1 bg-white p-6 overflow-y-auto w-full">
-                            <div className="grid grid-cols-4 gap-6">
-                                <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
-                                    <img src={ICONS.folder} className="w-12 h-12 drop-shadow" alt="folder" />
-                                    <span className="text-center text-xs truncate w-full">ReactJS</span>
-                                </div>
-                                <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
-                                    <img src={ICONS.folder} className="w-12 h-12 drop-shadow" alt="folder" />
-                                    <span className="text-center text-xs truncate w-full">NextJS</span>
-                                </div>
-                                <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
-                                    <img src={ICONS.folder} className="w-12 h-12 drop-shadow" alt="folder" />
-                                    <span className="text-center text-xs truncate w-full">TailwindCSS</span>
-                                </div>
-                                <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
-                                    <img src={ICONS.text} className="w-12 h-12 drop-shadow" alt="file" />
-                                    <span className="text-center text-xs truncate w-full">TypeScript.ts</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {/* Details Pane */}
-                    <div className="h-12 bg-[#accbee] border-t border-white shadow-inner flex items-center px-4 text-[#1c4b8b] text-xs">
-                        <img src={ICONS.folder} className="w-8 h-8 mr-4 opacity-80" alt="details" />
-                        <div>
-                            <div className="font-bold text-[14px]">Skills</div>
-                            <div>File Folder</div>
-                        </div>
-                    </div>
-                </div>
-            )
+            component: <FileManager initialPath="/home/user" />
         },
         {
             id: 'projects',
@@ -188,38 +151,10 @@ export default function DesktopWorkspace() {
             iconUrl: ICONS.folder,
             initialX: 300,
             initialY: 200,
-            width: 650,
-            height: 400,
+            width: 750,
+            height: 500,
             isOpen: false,
-            component: (
-                <div className="w-full h-full bg-[#f0f4f9] flex flex-col font-sans text-sm text-black">
-                    <div className="flex items-center px-2 py-2 gap-2 bg-[#d7e4f5] border-b border-white">
-                        <div className="flex gap-1">
-                            <div className="w-7 h-7 rounded-full bg-[#c9daf1] flex items-center justify-center border border-[#abbbe0] cursor-pointer text-[#1c4b8b] hover:bg-[#d8eaf9]"><Svgs.Back /></div>
-                            <div className="w-7 h-7 rounded-full bg-[#c9daf1] flex items-center justify-center border border-[#abbbe0] cursor-pointer text-[#1c4b8b] hover:bg-[#d8eaf9]"><Svgs.Forward /></div>
-                        </div>
-                        <div className="flex-1 flex px-2 py-[2px] bg-white border border-[#abbbe0] rounded items-center gap-2 shadow-inner">
-                            <img src={ICONS.folder} className="w-4 h-4" alt="folder" /> <span>Computer ▸ C: ▸ Users ▸ Mathew ▸ Projects</span>
-                        </div>
-                    </div>
-                    <div className="flex flex-1 overflow-hidden bg-white shadow-inner p-6">
-                        <div className="grid grid-cols-4 gap-6 w-full h-min">
-                            <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
-                                <img src={ICONS.folder} className="w-12 h-12 drop-shadow" alt="folder" />
-                                <span className="text-center text-xs truncate w-full font-semibold">WebOS</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
-                                <img src={ICONS.folder} className="w-12 h-12 drop-shadow" alt="folder" />
-                                <span className="text-center text-xs truncate w-full font-semibold">Retro Theme</span>
-                            </div>
-                            <div className="flex flex-col items-center gap-1 cursor-pointer hover:bg-[#d8eaf9] border border-transparent hover:border-[#a0cbf1] p-2 rounded">
-                                <img src={ICONS.text} className="w-12 h-12 drop-shadow" alt="text" />
-                                <span className="text-center text-xs truncate w-full">Readme.md</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )
+            component: <FileManager initialPath="/home/user/Projects" />
         },
         {
             id: 'about',
@@ -315,9 +250,9 @@ export default function DesktopWorkspace() {
     const [zIndexes, setZIndexes] = useState<{ [key: string]: number }>({});
     const [nextZIndex, setNextZIndex] = useState(10);
     const [time, setTime] = useState<string>('');
+    const [showStartMenu, setShowStartMenu] = useState(false);
 
     useEffect(() => {
-        // Open default windows on load to show off the system
         openFromDesktop('about');
 
         const updateTime = () => {
@@ -334,12 +269,21 @@ export default function DesktopWorkspace() {
         return () => clearInterval(interval);
     }, []);
 
+    // Close start menu when clicking elsewhere
+    useEffect(() => {
+        const handler = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (!target.closest('.start-menu-container') && !target.closest('.vista-start-orb')) {
+                setShowStartMenu(false);
+            }
+        };
+        document.addEventListener('mousedown', handler);
+        return () => document.removeEventListener('mousedown', handler);
+    }, []);
+
     const bringToFront = (id: string) => {
         setActiveWindowId(id);
-        setZIndexes(prev => ({
-            ...prev,
-            [id]: nextZIndex
-        }));
+        setZIndexes(prev => ({ ...prev, [id]: nextZIndex }));
         setNextZIndex(prev => prev + 1);
     };
 
@@ -372,85 +316,137 @@ export default function DesktopWorkspace() {
     const openFromDesktop = (id: string) => {
         setWindows(prev => prev.map(w => w.id === id ? { ...w, isOpen: true, isMinimized: false } : w));
         bringToFront(id);
+        setShowStartMenu(false);
     };
+
+    // Desktop icon definitions with positions
+    const desktopIcons = [
+        { icon: ICONS.info, label: 'About Me', windowId: 'about', pos: { x: 20, y: 20 } },
+        { icon: ICONS.computer, label: 'My Computer', windowId: 'filemanager', pos: { x: 20, y: 110 } },
+        { icon: ICONS.folder, label: 'Projects', windowId: 'projects', pos: { x: 20, y: 200 } },
+        { icon: ICONS.text, label: 'Experience.txt', windowId: 'experience', pos: { x: 20, y: 290 } },
+        { icon: ICONS.mail, label: 'Contact Me', windowId: 'contact', pos: { x: 20, y: 380 } },
+        { icon: ICONS.terminal, label: 'Command Prompt', windowId: 'cmd', pos: { x: 20, y: 470 } },
+    ];
 
     return (
         <div className="relative w-full h-screen overflow-hidden text-black font-sans bg-[#0c1f38]">
             {/* Background */}
             <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: "url('/windowsxpwallper.jpg')", backgroundSize: 'cover', backgroundPosition: 'center' }} />
 
-            {/* Desktop Icons */}
-            <div className="absolute top-6 left-4 flex flex-col gap-6 z-0">
-                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('about')}>
-                    <img src={ICONS.info} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="Computer" />
-                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
-                        About Me
-                    </div>
-                </div>
-
-                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('filemanager')}>
-                    <img src={ICONS.computer} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="Computer" />
-                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
-                        My Computer
-                    </div>
-                </div>
-
-                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('projects')}>
-                    <img src={ICONS.folder} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="Folder" />
-                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
-                        Projects
-                    </div>
-                </div>
-
-                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('experience')}>
-                    <img src={ICONS.text} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="Text" />
-                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
-                        Experience.txt
-                    </div>
-                </div>
-
-                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('contact')}>
-                    <img src={ICONS.mail} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="Mail" />
-                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
-                        Contact Me
-                    </div>
-                </div>
-
-                <div className="flex flex-col items-center w-24 cursor-pointer group" onDoubleClick={() => openFromDesktop('cmd')}>
-                    <img src={ICONS.terminal} className="w-12 h-12 mb-1 drop-shadow-md group-hover:brightness-110 opacity-90 group-hover:opacity-100" alt="CMD" />
-                    <div className="text-white text-xs text-center drop-shadow-md group-hover:bg-[#2080d0] px-1 rounded border border-transparent group-hover:border-[#a0cbf1] max-w-full font-[segoe_ui]" style={{ textShadow: "1px 1px 2px black" }}>
-                        Command Prompt
-                    </div>
-                </div>
-            </div>
+            {/* Draggable Desktop Icons */}
+            {desktopIcons.map(di => (
+                <DesktopIcon
+                    key={di.windowId}
+                    icon={di.icon}
+                    label={di.label}
+                    initialPos={di.pos}
+                    onDoubleClick={() => openFromDesktop(di.windowId)}
+                />
+            ))}
 
             {/* Windows */}
-            {
-                windows.map(win => win.isOpen && !win.isMinimized && (
-                    <Window
-                        key={win.id}
-                        id={win.id}
-                        title={win.title}
-                        initialX={win.initialX}
-                        initialY={win.initialY}
-                        width={win.width}
-                        height={win.height}
-                        zIndex={zIndexes[win.id] || 1}
-                        onFocus={bringToFront}
-                        onClose={closeWindow}
-                        onMinimize={minimizeWindow}
-                    >
-                        {win.component}
-                    </Window>
-                ))
-            }
+            {windows.map(win => win.isOpen && !win.isMinimized && (
+                <Window
+                    key={win.id}
+                    id={win.id}
+                    title={win.title}
+                    initialX={win.initialX}
+                    initialY={win.initialY}
+                    width={win.width}
+                    height={win.height}
+                    zIndex={zIndexes[win.id] || 1}
+                    onFocus={bringToFront}
+                    onClose={closeWindow}
+                    onMinimize={minimizeWindow}
+                >
+                    {win.component}
+                </Window>
+            ))}
+
+            {/* Vista Start Menu */}
+            {showStartMenu && (
+                <div className="start-menu-container absolute bottom-[40px] left-0 z-[999] w-[380px]"
+                    style={{ fontFamily: 'Tahoma, Segoe UI, sans-serif' }}
+                >
+                    <div className="bg-gradient-to-b from-[#4a8bd4] to-[#2b5ca0] rounded-t-lg overflow-hidden border border-[#1a3a6a] shadow-2xl">
+                        {/* User Header */}
+                        <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#2b5ca0] to-[#3e7ec7]">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-300 to-gray-500 border-2 border-white/60 flex items-center justify-center text-white font-bold text-lg shadow-md">M</div>
+                            <span className="text-white font-bold text-sm" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Mathew</span>
+                        </div>
+
+                        {/* Two columns */}
+                        <div className="flex">
+                            {/* Left - Programs */}
+                            <div className="flex-1 bg-white py-2">
+                                <div className="px-3 pb-1 text-xs text-gray-500 font-bold border-b border-gray-200 mb-1">Programs</div>
+                                {[
+                                    { id: 'filemanager', label: 'Windows Explorer', icon: ICONS.computer },
+                                    { id: 'cmd', label: 'Command Prompt', icon: ICONS.terminal },
+                                    { id: 'experience', label: 'Notepad', icon: ICONS.text },
+                                    { id: 'contact', label: 'Windows Mail', icon: ICONS.mail },
+                                    { id: 'about', label: 'Welcome Center', icon: ICONS.info },
+                                    { id: 'skills', label: 'Documents', icon: ICONS.folder },
+                                    { id: 'projects', label: 'Projects', icon: ICONS.folder },
+                                ].map(item => (
+                                    <div
+                                        key={item.id}
+                                        className="flex items-center gap-3 px-3 py-[6px] hover:bg-[#316ac5] hover:text-white cursor-pointer text-xs text-black"
+                                        onClick={() => openFromDesktop(item.id)}
+                                    >
+                                        <img src={item.icon} className="w-6 h-6" alt="" />
+                                        <span>{item.label}</span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Right - Places */}
+                            <div className="w-[160px] bg-[#d3e5fa] py-2 border-l border-[#a0c4e8]">
+                                <div className="px-3 pb-1 text-xs text-[#1e3b6e] font-bold border-b border-[#a0c4e8] mb-1">Places</div>
+                                {[
+                                    { id: 'filemanager', label: 'My Computer' },
+                                    { id: 'skills', label: 'Documents' },
+                                    { id: 'projects', label: 'Projects' },
+                                ].map(item => (
+                                    <div
+                                        key={'place-' + item.id}
+                                        className="px-3 py-[5px] text-xs text-[#1e3b6e] hover:bg-[#316ac5] hover:text-white cursor-pointer font-semibold"
+                                        onClick={() => openFromDesktop(item.id)}
+                                    >
+                                        {item.label}
+                                    </div>
+                                ))}
+                                <div className="border-t border-[#a0c4e8] my-1" />
+                                <div className="px-3 py-[5px] text-xs text-[#1e3b6e] hover:bg-[#316ac5] hover:text-white cursor-pointer">Control Panel</div>
+                                <div className="px-3 py-[5px] text-xs text-[#1e3b6e] hover:bg-[#316ac5] hover:text-white cursor-pointer">Help and Support</div>
+                            </div>
+                        </div>
+
+                        {/* Bottom bar */}
+                        <div className="flex justify-end items-center bg-gradient-to-r from-[#2b5ca0] to-[#3e7ec7] px-4 py-2 gap-4 border-t border-[#5a95d0]">
+                            <div className="flex items-center gap-2 text-white text-xs cursor-pointer hover:underline opacity-90">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m15.36-6.36l-4.24 4.24m0 0L7.88 7.88m4.24 4.24l-4.24 4.24m4.24-4.24l4.24 4.24" /></svg>
+                                <span>Log Off</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-white text-xs cursor-pointer hover:underline opacity-90">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18.36 6.64A9 9 0 0 1 6.1 18.36M5.64 5.64A9 9 0 0 0 17.9 18.36" /><line x1="12" y1="2" x2="12" y2="6" /></svg>
+                                <span>Shut Down</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Vista Taskbar */}
             <div className="absolute bottom-0 left-0 right-0 h-[40px] vista-taskbar flex items-center justify-between z-50 select-none px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.5)]">
 
                 <div className="flex h-full items-center gap-2 flex-1">
                     {/* Start Orb */}
-                    <div className="vista-start-orb shadow-[1px_1px_5px_rgba(0,0,0,0.8)]">
+                    <div
+                        className="vista-start-orb shadow-[1px_1px_5px_rgba(0,0,0,0.8)]"
+                        onClick={() => setShowStartMenu(prev => !prev)}
+                    >
                         <img src={ICONS.windowsLogo} className="w-6 h-6 object-contain" alt="Start" />
                     </div>
 
@@ -481,6 +477,6 @@ export default function DesktopWorkspace() {
                     <span className="font-sans text-xs drop-shadow-md" style={{ textShadow: "1px 1px 2px rgba(0,0,0,0.8)" }}>{time}</span>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
