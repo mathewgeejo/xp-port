@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Window from './Window';
+import StartMenu from './StartMenu';
 import dynamic from 'next/dynamic';
 
 const Terminal = dynamic(() => import('./Terminal'), { ssr: false });
@@ -269,17 +270,7 @@ export default function DesktopWorkspace() {
         return () => clearInterval(interval);
     }, []);
 
-    // Close start menu when clicking elsewhere
-    useEffect(() => {
-        const handler = (e: MouseEvent) => {
-            const target = e.target as HTMLElement;
-            if (!target.closest('.start-menu-container') && !target.closest('.vista-start-orb')) {
-                setShowStartMenu(false);
-            }
-        };
-        document.addEventListener('mousedown', handler);
-        return () => document.removeEventListener('mousedown', handler);
-    }, []);
+    // Start menu close listener now handled inside StartMenu component
 
     const bringToFront = (id: string) => {
         setActiveWindowId(id);
@@ -365,78 +356,11 @@ export default function DesktopWorkspace() {
             ))}
 
             {/* Vista Start Menu */}
-            {showStartMenu && (
-                <div className="start-menu-container absolute bottom-[40px] left-0 z-[999] w-[380px]"
-                    style={{ fontFamily: 'Tahoma, Segoe UI, sans-serif' }}
-                >
-                    <div className="bg-gradient-to-b from-[#4a8bd4] to-[#2b5ca0] rounded-t-lg overflow-hidden border border-[#1a3a6a] shadow-2xl">
-                        {/* User Header */}
-                        <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-[#2b5ca0] to-[#3e7ec7]">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-300 to-gray-500 border-2 border-white/60 flex items-center justify-center text-white font-bold text-lg shadow-md">M</div>
-                            <span className="text-white font-bold text-sm" style={{ textShadow: '1px 1px 2px rgba(0,0,0,0.5)' }}>Mathew</span>
-                        </div>
-
-                        {/* Two columns */}
-                        <div className="flex">
-                            {/* Left - Programs */}
-                            <div className="flex-1 bg-white py-2">
-                                <div className="px-3 pb-1 text-xs text-gray-500 font-bold border-b border-gray-200 mb-1">Programs</div>
-                                {[
-                                    { id: 'filemanager', label: 'Windows Explorer', icon: ICONS.computer },
-                                    { id: 'cmd', label: 'Command Prompt', icon: ICONS.terminal },
-                                    { id: 'experience', label: 'Notepad', icon: ICONS.text },
-                                    { id: 'contact', label: 'Windows Mail', icon: ICONS.mail },
-                                    { id: 'about', label: 'Welcome Center', icon: ICONS.info },
-                                    { id: 'skills', label: 'Documents', icon: ICONS.folder },
-                                    { id: 'projects', label: 'Projects', icon: ICONS.folder },
-                                ].map(item => (
-                                    <div
-                                        key={item.id}
-                                        className="flex items-center gap-3 px-3 py-[6px] hover:bg-[#316ac5] hover:text-white cursor-pointer text-xs text-black"
-                                        onClick={() => openFromDesktop(item.id)}
-                                    >
-                                        <img src={item.icon} className="w-6 h-6" alt="" />
-                                        <span>{item.label}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Right - Places */}
-                            <div className="w-[160px] bg-[#d3e5fa] py-2 border-l border-[#a0c4e8]">
-                                <div className="px-3 pb-1 text-xs text-[#1e3b6e] font-bold border-b border-[#a0c4e8] mb-1">Places</div>
-                                {[
-                                    { id: 'filemanager', label: 'My Computer' },
-                                    { id: 'skills', label: 'Documents' },
-                                    { id: 'projects', label: 'Projects' },
-                                ].map(item => (
-                                    <div
-                                        key={'place-' + item.id}
-                                        className="px-3 py-[5px] text-xs text-[#1e3b6e] hover:bg-[#316ac5] hover:text-white cursor-pointer font-semibold"
-                                        onClick={() => openFromDesktop(item.id)}
-                                    >
-                                        {item.label}
-                                    </div>
-                                ))}
-                                <div className="border-t border-[#a0c4e8] my-1" />
-                                <div className="px-3 py-[5px] text-xs text-[#1e3b6e] hover:bg-[#316ac5] hover:text-white cursor-pointer">Control Panel</div>
-                                <div className="px-3 py-[5px] text-xs text-[#1e3b6e] hover:bg-[#316ac5] hover:text-white cursor-pointer">Help and Support</div>
-                            </div>
-                        </div>
-
-                        {/* Bottom bar */}
-                        <div className="flex justify-end items-center bg-gradient-to-r from-[#2b5ca0] to-[#3e7ec7] px-4 py-2 gap-4 border-t border-[#5a95d0]">
-                            <div className="flex items-center gap-2 text-white text-xs cursor-pointer hover:underline opacity-90">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3" /><path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m15.36-6.36l-4.24 4.24m0 0L7.88 7.88m4.24 4.24l-4.24 4.24m4.24-4.24l4.24 4.24" /></svg>
-                                <span>Log Off</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-white text-xs cursor-pointer hover:underline opacity-90">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18.36 6.64A9 9 0 0 1 6.1 18.36M5.64 5.64A9 9 0 0 0 17.9 18.36" /><line x1="12" y1="2" x2="12" y2="6" /></svg>
-                                <span>Shut Down</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <StartMenu
+                isOpen={showStartMenu}
+                onClose={() => setShowStartMenu(false)}
+                onOpenWindow={openFromDesktop}
+            />
 
             {/* Vista Taskbar */}
             <div className="absolute bottom-0 left-0 right-0 h-[40px] vista-taskbar flex items-center justify-between z-50 select-none px-2 shadow-[0_-2px_10px_rgba(0,0,0,0.5)]">
